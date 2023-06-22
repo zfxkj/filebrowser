@@ -89,19 +89,27 @@ var sharePostHandler = withPermShare(func(w http.ResponseWriter, r *http.Request
 		}
 		defer r.Body.Close()
 	}
+	var str string
+	const six int = 6
+	if body.Fxlink != "" {
+		if len(body.Fxlink) > six {
+			str = body.Fxlink[0:5]
+		} else {
+			str = body.Fxlink
+		}
+	} else {
+		bytes := make([]byte, six)
+		_, err := rand.Read(bytes)
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
 
-	bytes := make([]byte, 6) //nolint:gomnd
-	_, err := rand.Read(bytes)
-	if err != nil {
-		return http.StatusInternalServerError, err
+		str = base64.URLEncoding.EncodeToString(bytes)
 	}
-
-	str := base64.URLEncoding.EncodeToString(bytes)
 
 	var expire int64 = 0
 
 	if body.Expires != "" {
-		//nolint:govet
 		num, err := strconv.Atoi(body.Expires)
 		if err != nil {
 			return http.StatusInternalServerError, err

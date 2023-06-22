@@ -5,7 +5,6 @@
     "copy": "Copy",
     "copyFile": "Copy file",
     "copyToClipboard": "Copy to clipboard",
-    "copyDownloadLinkToClipboard": "Copy download link to clipboard",
     "create": "Create",
     "delete": "Delete",
     "download": "Download",
@@ -156,7 +155,8 @@
     "upload": "Upload",
     "uploadFiles": "Uploading {files} files...",
     "uploadMessage": "Select an option to upload.",
-    "optionalPassword": "Optional password"
+    "optionalPassword": "Optional password",
+    "fxlink": "Please set the share link 6 digits (optional)"
   },
   "search": {
     "images": "Images",

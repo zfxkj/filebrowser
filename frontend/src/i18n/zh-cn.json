@@ -154,7 +154,8 @@
     "size": "大小",
     "upload": "上传",
     "uploadMessage": "选择上传选项。",
-    "optionalPassword": "密码（选填，不填即无密码）"
+    "optionalPassword": "密码（选填，不填即无密码）",
+    "fxlink": "请设置分享链接6位（选填）"
   },
   "search": {
     "images": "图像",

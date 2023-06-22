@@ -32,16 +32,6 @@
                 <i class="material-icons">content_paste</i>
               </button>
             </td>
-            <td class="small" v-if="hasDownloadLink()">
-              <button
-                class="action copy-clipboard"
-                :data-clipboard-text="buildDownloadLink(link)"
-                :aria-label="$t('buttons.copyDownloadLinkToClipboard')"
-                :title="$t('buttons.copyDownloadLinkToClipboard')"
-              >
-                <i class="material-icons">content_paste_go</i>
-              </button>
-            </td>
             <td class="small">
               <button
                 class="action"
@@ -78,6 +68,13 @@
 
     <template v-else>
       <div class="card-content">
+        <p>{{ $t("prompts.fxlink") }}</p>
+        <input
+          class="input input--block"
+          type="text"
+          v-model.trim="fxlink"
+          maxlength="6"
+        />
         <p>{{ $t("settings.shareDuration") }}</p>
         <div class="input-group input">
           <input
@@ -127,7 +124,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { share as api, pub as pub_api } from "@/api";
+import { share as api } from "@/api";
 import moment from "moment";
 import Clipboard from "clipboard";
 
@@ -191,7 +188,13 @@ export default {
         if (isPermanent) {
           res = await api.create(this.url, this.password);
         } else {
-          res = await api.create(this.url, this.password, this.time, this.unit);
+          res = await api.create(
+            this.url,
+            this.fxlink,
+            this.password,
+            this.time,
+            this.unit
+          );
         }
 
         this.links.push(res);
@@ -224,14 +227,6 @@ export default {
     },
     buildLink(share) {
       return api.getShareURL(share);
-    },
-    hasDownloadLink() {
-      return (
-        this.selected.length === 1 && !this.req.items[this.selected[0]].isDir
-      );
-    },
-    buildDownloadLink(share) {
-      return pub_api.getDownloadURL(share);
     },
     sort() {
       this.links = this.links.sort((a, b) => {

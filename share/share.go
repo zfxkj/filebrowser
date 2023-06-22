@@ -1,6 +1,7 @@
 package share
 
 type CreateBody struct {
+	Fxlink   string `json:"fxlink"`
 	Password string `json:"password"`
 	Expires  string `json:"expires"`
 	Unit     string `json:"unit"`

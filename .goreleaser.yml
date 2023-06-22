@@ -3,32 +3,36 @@ project_name: filebrowser
 env:
   - GO111MODULE=on
 
-build:
-  env:
-    - CGO_ENABLED=0
-  ldflags:
-    - -s -w -X github.com/filebrowser/filebrowser/v2/version.Version={{ .Version }} -X github.com/filebrowser/filebrowser/v2/version.CommitSHA={{ .ShortCommit }}
-  main: main.go
-  binary: filebrowser
-  goos:
-    - darwin
-    - linux
-    - windows
-    - freebsd
-  goarch:
-    - amd64
-    - 386
-    - arm
-    - arm64
-  goarm:
-    - 5
-    - 6
-    - 7
-  ignore:
-    - goos: darwin
-      goarch: 386
-    - goos: freebsd
-      goarch: arm
+changelog:
+  skip: true
+  
+builds:
+  -
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/zfxkj/filebrowser/v2/version.Version={{ .Version }} -X github.com/zfxkj/filebrowser/v2/version.CommitSHA={{ .ShortCommit }}
+    main: main.go
+    binary: filebrowser
+    goos:
+      - darwin
+      - linux
+      - windows
+      - freebsd
+    goarch:
+      - amd64
+      - 386
+      - arm
+      - arm64
+    goarm:
+      - 5
+      - 6
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: freebsd
+        goarch: arm
 
 archives:
   -
@@ -53,8 +57,8 @@ dockers:
     goos: linux
     goarch: amd64
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64"
-      - "filebrowser/filebrowser:v{{ .Major }}-amd64"
+      - "zfxkj/filebrowser:{{ .Tag }}-amd64"
+      # - "zfxkj/filebrowser:v{{ .Major }}-amd64"
     extra_files:
       - docker_config.json
   -
@@ -71,8 +75,8 @@ dockers:
     goos: linux
     goarch: arm64
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64"
-      - "filebrowser/filebrowser:v{{ .Major }}-arm64"
+      - "zfxkj/filebrowser:{{ .Tag }}-arm64"
+      # - "zfxkj/filebrowser:v{{ .Major }}-arm64"
     extra_files:
       - docker_config.json
   -
@@ -90,8 +94,8 @@ dockers:
     goarch: arm
     goarm: '6'
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv6"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv6"
+      # - "zfxkj/filebrowser:v{{ .Major }}-armv6"
     extra_files:
       - docker_config.json
   -
@@ -109,132 +113,132 @@ dockers:
     goarch: arm
     goarm: '7'
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv7"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv7"
+      # - "zfxkj/filebrowser:v{{ .Major }}-armv7"
     extra_files:
       - docker_config.json
 ## s6 based docker images
-  -
-    dockerfile: Dockerfile.s6
-    use: buildx
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.name={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--platform=linux/amd64"
-    goos: linux
-    goarch: amd64
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-amd64-s6"
-    extra_files:
-      - docker/root
-  -
-    dockerfile: Dockerfile.s6.aarch64
-    use: buildx
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.name={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--platform=linux/arm64"
-    goos: linux
-    goarch: arm64
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-arm64-s6"
-    extra_files:
-      - docker/root
-  -
-    dockerfile: Dockerfile.s6.armhf
-    use: buildx
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.name={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--platform=linux/arm/v6"
-    goos: linux
-    goarch: arm
-    goarm: '6'
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv6-s6"
-    extra_files:
-      - docker/root
-  -
-    dockerfile: Dockerfile.s6.armhf
-    use: buildx
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.name={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--platform=linux/arm/v7"
-    goos: linux
-    goarch: arm
-    goarm: '7'
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv7-s6"
-    extra_files:
-      - docker/root
+  # -
+  #   dockerfile: Dockerfile.s6
+  #   use: buildx
+  #   build_flag_templates:
+  #     - "--pull"
+  #     - "--label=org.opencontainers.image.created={{.Date}}"
+  #     - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  #     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  #     - "--label=org.opencontainers.image.version={{.Version}}"
+  #     - "--label=org.opencontainers.image.source={{.GitURL}}"
+  #     - "--platform=linux/amd64"
+  #   goos: linux
+  #   goarch: amd64
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-amd64-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-amd64-s6"
+  #   extra_files:
+  #     - docker/root
+  # -
+  #   dockerfile: Dockerfile.s6.aarch64
+  #   use: buildx
+  #   build_flag_templates:
+  #     - "--pull"
+  #     - "--label=org.opencontainers.image.created={{.Date}}"
+  #     - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  #     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  #     - "--label=org.opencontainers.image.version={{.Version}}"
+  #     - "--label=org.opencontainers.image.source={{.GitURL}}"
+  #     - "--platform=linux/arm64"
+  #   goos: linux
+  #   goarch: arm64
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-arm64-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-arm64-s6"
+  #   extra_files:
+  #     - docker/root
+  # -
+  #   dockerfile: Dockerfile.s6.armhf
+  #   use: buildx
+  #   build_flag_templates:
+  #     - "--pull"
+  #     - "--label=org.opencontainers.image.created={{.Date}}"
+  #     - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  #     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  #     - "--label=org.opencontainers.image.version={{.Version}}"
+  #     - "--label=org.opencontainers.image.source={{.GitURL}}"
+  #     - "--platform=linux/arm/v6"
+  #   goos: linux
+  #   goarch: arm
+  #   goarm: '6'
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv6-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-armv6-s6"
+  #   extra_files:
+  #     - docker/root
+  # -
+  #   dockerfile: Dockerfile.s6.armhf
+  #   use: buildx
+  #   build_flag_templates:
+  #     - "--pull"
+  #     - "--label=org.opencontainers.image.created={{.Date}}"
+  #     - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  #     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  #     - "--label=org.opencontainers.image.version={{.Version}}"
+  #     - "--label=org.opencontainers.image.source={{.GitURL}}"
+  #     - "--platform=linux/arm/v7"
+  #   goos: linux
+  #   goarch: arm
+  #   goarm: '7'
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv7-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-armv7-s6"
+  #   extra_files:
+  #     - docker/root
 docker_manifests:
-  - name_template: "filebrowser/filebrowser:latest"
+  - name_template: "zfxkj/filebrowser:latest"
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64"
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7"
-  - name_template: "filebrowser/filebrowser:{{ .Tag }}"
+      - "zfxkj/filebrowser:{{ .Tag }}-amd64"
+      - "zfxkj/filebrowser:{{ .Tag }}-arm64"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv6"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv7"
+  - name_template: "zfxkj/filebrowser:{{ .Tag }}"
     image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64"
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7"
-  - name_template: "filebrowser/filebrowser:v{{ .Major }}"
-    image_templates:
-      - "filebrowser/filebrowser:v{{ .Major }}-amd64"
-      - "filebrowser/filebrowser:v{{ .Major }}-arm64"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv7"
+      - "zfxkj/filebrowser:{{ .Tag }}-amd64"
+      - "zfxkj/filebrowser:{{ .Tag }}-arm64"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv6"
+      - "zfxkj/filebrowser:{{ .Tag }}-armv7"
+  # - name_template: "filebrowser/filebrowser:v{{ .Major }}"
+  #   image_templates:
+  #     - "filebrowser/filebrowser:v{{ .Major }}-amd64"
+  #     - "filebrowser/filebrowser:v{{ .Major }}-arm64"
+  #     - "filebrowser/filebrowser:v{{ .Major }}-armv6"
+  #     - "filebrowser/filebrowser:v{{ .Major }}-armv7"
 ## s6 image manifests
-  - name_template: "filebrowser/filebrowser:s6"
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7-s6"
-  - name_template: "filebrowser/filebrowser:{{ .Tag }}-s6"
-    image_templates:
-      - "filebrowser/filebrowser:{{ .Tag }}-amd64-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-arm64-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv6-s6"
-      - "filebrowser/filebrowser:{{ .Tag }}-armv7-s6"
-  - name_template: "filebrowser/filebrowser:v{{ .Major }}-s6"
-    image_templates:
-      - "filebrowser/filebrowser:v{{ .Major }}-amd64-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-arm64-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv6-s6"
-      - "filebrowser/filebrowser:v{{ .Major }}-armv7-s6"
-brews:
-  - name: filebrowser
-    tap:
-      owner: filebrowser
-      name: homebrew-tap
-    folder: Formula
-    homepage: https://filebrowser.org
-    commit_author:
-      name: FileBrowser Robot
-      email: robot@filebrowser.org
-    description: File Browser is a create-your-own-cloud-kind of software where you can install it on a server, direct it to a path and then access your files through a nice web interface
-    license: "MIT"
+  # - name_template: "zfxkj/filebrowser:s6"
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-amd64-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-arm64-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv6-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv7-s6"
+  # - name_template: "zfxkj/filebrowser:{{ .Tag }}-s6"
+  #   image_templates:
+  #     - "zfxkj/filebrowser:{{ .Tag }}-amd64-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-arm64-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv6-s6"
+  #     - "zfxkj/filebrowser:{{ .Tag }}-armv7-s6"
+  # - name_template: "zfxkj/filebrowser:v{{ .Major }}-s6"
+  #   image_templates:
+  #     - "zfxkj/filebrowser:v{{ .Major }}-amd64-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-arm64-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-armv6-s6"
+  #     - "zfxkj/filebrowser:v{{ .Major }}-armv7-s6"
+# brews:
+#   - name: filebrowser
+#     tap:
+#       owner: filebrowser
+#       name: homebrew-tap
+#     folder: Formula
+#     homepage: https://filebrowser.org
+#     commit_author:
+#       name: FileBrowser Zfxkj
+#       email: 2675699284@qq.com
+#     description: File Browser is a create-your-own-cloud-kind of software where you can install it on a server, direct it to a path and then access your files through a nice web interface
+#     license: "MIT"

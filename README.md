@@ -1,3 +1,18 @@
+# 基于原项目修改
+在原项目的基础上添加了分享链接的自定义功能，该功能的实现要感谢[zfb132](https://github.com/zfb132)提供技术性指导。  
+docker 使用方法
+```bash
+docker run \
+    -v /path/to/root:/srv \
+    -v /path/to/filebrowser.db:/database/filebrowser.db \
+    -v /path/to/settings.json:/config/settings.json \
+    -e PUID=$(id -u) \
+    -e PGID=$(id -g) \
+    -p 8080:80 \
+    zfxkj/filebrowser:latest
+```
+
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/filebrowser/logo/master/banner.png" width="550"/>
 </p>
