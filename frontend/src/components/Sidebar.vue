@@ -99,7 +99,7 @@
           v-else
           rel="noopener noreferrer"
           target="_blank"
-          href="https://github.com/filebrowser/filebrowser"
+          href="https://github.com/zfxkj/filebrowser"
           >File Browser</a
         >
         <span> {{ version }}</span>
